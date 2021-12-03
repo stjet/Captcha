@@ -1,0 +1,16 @@
+current directory: /home/runner/Captcha/.bundle/ruby/2.7.0/gems/salsa20-0.1.3/ext/salsa20_ext
+/nix/store/yfmnyvd0asw5bs24lg611xn2gi4prqla-ruby-2.7.4/bin/ruby -I /nix/store/yfmnyvd0asw5bs24lg611xn2gi4prqla-ruby-2.7.4/lib/ruby/2.7.0 -r ./siteconf20211127-72144-1lyx37p.rb extconf.rb
+creating Makefile
+
+current directory: /home/runner/Captcha/.bundle/ruby/2.7.0/gems/salsa20-0.1.3/ext/salsa20_ext
+make DESTDIR\= clean
+
+current directory: /home/runner/Captcha/.bundle/ruby/2.7.0/gems/salsa20-0.1.3/ext/salsa20_ext
+make DESTDIR\=
+compiling salsa20.c
+compiling salsa20_ext.c
+linking shared-object salsa20_ext.so
+
+current directory: /home/runner/Captcha/.bundle/ruby/2.7.0/gems/salsa20-0.1.3/ext/salsa20_ext
+make DESTDIR\= install
+/nix/store/1570w56jrkvr90w9x158vyb5vahnk18v-coreutils-8.32/bin/install -c -m 0755 salsa20_ext.so ./.gem.20211127-72144-17t6wx

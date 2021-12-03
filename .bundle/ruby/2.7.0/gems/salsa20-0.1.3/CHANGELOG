@@ -1,0 +1,19 @@
+0.1.3  Sep 23 2018
+
+- Correct compilation for SmartOS/Illumos on little-endian CPUs (by @bahamas10)
+- Update dependencies versions
+
+0.1.2  Nov 10 2015
+
+- Use minitest for unit testing
+
+0.1.1  Jun 27 2014
+
+- Fix tests on Ruby 1.9.x
+- Add bundler support to ease development
+- Add Travis CI config file
+- Detailed dependencies versions
+
+0.1.0  Aug 20 2011
+
+- Initial release
