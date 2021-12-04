@@ -84,6 +84,8 @@ get '/challenge/:encrypted.png' do
   image = ChunkyPNG::Image.new(210, 70, ChunkyPNG::Color::WHITE)
   for i in 1..code.chars.length
     char_img = ChunkyPNG::Image.from_file("chars/"+code.chars[i-1].upcase+".png")
+    #change size of char img also
+    char_img = char_img.resample_bilinear(char_img.width+rand(8), char_img.height+rand(8))
     for j in 1..50+rand(40)
       char_img.compose_pixel(rand(char_img.width), rand(char_img.height), ChunkyPNG::Color::BLACK)
       char_img.compose_pixel(rand(char_img.width), rand(char_img.height), ChunkyPNG::Color::WHITE)
