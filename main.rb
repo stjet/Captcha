@@ -23,15 +23,21 @@ def gen_key()
   return SecureRandom.random_bytes(32)
 end
 
+def get_time()
+  return Time.new.to_i
+end
+
 def gen_nonce(bytes)
   return SecureRandom.random_bytes(bytes)
 end
 
-def encrypt(code, nonce)
-  return Salsa20.new(Array(ENV['key']).pack("H*"), nonce).encrypt(code).unpack("H*")
+def encrypt(code, nonce) 
+  current_time = get_time().to_s
+  to_encrypt = code+'-'+current_time
+  return Salsa20.new(Array(ENV['key']).pack("H*"), nonce).encrypt(to_encrypt).unpack("H*")
 end
 
-def decrypt(encrypted, nonce)
+def decrypt(encrypted, nonce) 
   return Salsa20.new(Array(ENV['key']).pack("H*"), Array(nonce).pack("H*")).decrypt(Array(encrypted).pack("H*"))
 end
 
@@ -65,9 +71,18 @@ end
 
 post '/captcha' do
   # decrypt code in post request and check if matches with answer in post
-  if decrypt(request['code'], request['nonce']) == request['guess']
+  current_time = get_time()
+  decrypted = decrypt(request['code'], request['nonce'])
+  code = decrypted.split('-', -1)[0]
+  time = decrypted.split('-', -1)[1]
+  if time.to_i > current_time
+    return "{\"success\": false}"
+  end
+  # check to make sure validation request is not more than 5 minutes after serving
+  if code == request['guess'] && time.to_i+(60*5) > current_time
     return "{\"success\": true}"
   else
+    puts 'b'
     return "{\"success\": false}"
   end
 end
@@ -75,7 +90,10 @@ end
 get '/challenge/:encrypted.png' do
   # decrypt and generate image
   # ?nonce=xxx
-  code = decrypt(params['encrypted'], params['nonce'])
+  decrypted = decrypt(params['encrypted'], params['nonce'])
+  code = decrypted.split('-', -1)[0]
+  # we dont need the time
+  #time = decrypted.split('-', -1)[1]
   valid = code.chars.map { |char| char.downcase }.all? { |char| $chars.include? char }
   if !valid
     return "Error: invalid code"
