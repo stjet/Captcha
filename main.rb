@@ -9,6 +9,8 @@ require 'sinatra'
 set :bind, '0.0.0.0'
 set :port, 8080
 
+set :protection, :except => :json_csrf
+
 $chars = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 
 def gen_code(length)
@@ -59,8 +61,8 @@ post '/' do
 end
 
 get '/captcha' do
-	content_type 'application/json'
-	# set :json_content_type, 'application/json'
+  content_type 'application/json'
+  # set :json_content_type, 'application/json'
   # return json of image url, nonce and encrypted text of code
   nonce = gen_nonce(8)
   encrypted = encrypt(gen_code(6), nonce)
@@ -72,7 +74,7 @@ get '/captcha' do
 end
 
 post '/captcha' do
-	content_type 'application/json'
+  content_type 'application/json'
   # decrypt code in post request and check if matches with answer in post
   current_time = get_time()
   decrypted = decrypt(request['code'], request['nonce'])
