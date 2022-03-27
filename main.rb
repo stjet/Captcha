@@ -1,10 +1,10 @@
-require 'sinatra'
 require 'securerandom'
 require 'salsa20'
 require 'chunky_png'
 require 'json'
 require 'uri'
 require 'net/http'
+require 'sinatra'
 
 set :bind, '0.0.0.0'
 set :port, 8080
@@ -59,6 +59,8 @@ post '/' do
 end
 
 get '/captcha' do
+	content_type 'application/json'
+	# set :json_content_type, 'application/json'
   # return json of image url, nonce and encrypted text of code
   nonce = gen_nonce(8)
   encrypted = encrypt(gen_code(6), nonce)
@@ -70,6 +72,7 @@ get '/captcha' do
 end
 
 post '/captcha' do
+	content_type 'application/json'
   # decrypt code in post request and check if matches with answer in post
   current_time = get_time()
   decrypted = decrypt(request['code'], request['nonce'])
@@ -82,9 +85,7 @@ post '/captcha' do
   if code == request['guess'] && time.to_i+(60*5) > current_time
     return "{\"success\": true}"
   else
-    puts 'b'
-    return "{\"success\": false}"
-  end
+    return "{\"success\": false}"  end
 end
 
 get '/challenge/:encrypted.png' do
